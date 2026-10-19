@@ -12,3 +12,4 @@ Evidencia de observabilidad de la Pre-Entrega 7. Cómo sacar cada una: sección
 | `05_costo_total.png` | El costo de la corrida (Metrics → Cost) |
 | `06_hitl_sesion.png` | Un job con aprobación humana: dos trazas en la misma sesión |
 | `07_job_failed.png` | Una ejecución fallida registrada como error |
+| `07b_job_failed_api.png` | La API devolviendo el job en estado FAILED con el error |

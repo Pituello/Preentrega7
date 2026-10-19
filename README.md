@@ -284,8 +284,20 @@ Una consulta a mano, desde otra terminal:
 
 ```bash
 curl -X POST localhost:8000/tasks -H "Content-Type: application/json" \
-     -d '{"tarea": "¿Cuántos CV más tiene el Virtus Exclusive que el Tera High?"}'
+     -d '{"tarea": "Cuantos CV mas tiene el Virtus Exclusive que el Tera High?"}'
 curl localhost:8000/tasks/<job_id>
+```
+
+> En Git Bash (Windows), `curl` manda las tildes y los signos `¿` en la codificación
+> de Windows, no en UTF-8, y la API responde `There was an error parsing the body`.
+> Por eso el ejemplo va sin tildes. Los scripts de `scripts/` no tienen este problema:
+> mandan UTF-8 siempre. También se puede usar la página `/docs`.
+
+Para probar el estado FAILED a mano:
+
+```bash
+curl -X POST localhost:8000/tasks -H "Content-Type: application/json" \
+     -d '{"tarea": "Cuanta potencia tiene el Tera?", "simulacion": {"romper_grafo": true}}'
 ```
 
 **Variantes:**
@@ -328,7 +340,7 @@ rango de tiempo **Last 15 Min** (arriba a la derecha):
 | `04_latencia_p95.png` | La latencia p95 de la corrida | Pestaña **Metrics**, gráfico **Trace latency**: **pasar el mouse sobre el punto** muestra p50, p75, p90, **p95** y p99 |
 | `05_costo_total.png` | El costo de la corrida | Pestaña **Metrics**, gráfico **Cost** (pasar el mouse sobre la barra) |
 | `06_hitl_sesion.png` | Un job con aprobación humana: dos trazas en la misma sesión | Pestaña **Sessions** (después de `scripts/demo_hitl.py`) |
-| `07_job_failed.png` | Una ejecución fallida registrada como error | Pestaña Traces: la traza en rojo de `{"simulacion": {"romper_grafo": true}}` |
+| `07_job_failed.png` | Una ejecución fallida registrada como error | Pestaña Traces: la traza en rojo del `curl` de la sección 8 con `{"simulacion": {"romper_grafo": true}}` |
 
 ### Resultados de la corrida real
 
