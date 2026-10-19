@@ -1,0 +1,30 @@
+# Python 3.12
+# --- Orquestador multi-agente (Pre-Entrega 6) ---
+langgraph>=1.0,<2
+langchain>=1.0          # create_agent (agentes especialistas)
+langchain-core>=1.0
+pydantic
+python-dotenv
+loguru
+rank_bm25
+
+# Proveedores de LLM (alcanza con configurar uno en el .env)
+langchain-openai
+langchain-anthropic
+langchain-google-genai
+langchain-ollama
+
+# --- API de producción (Pre-Entrega 7) ---
+fastapi>=0.115
+uvicorn[standard]>=0.30
+redis>=5.2                         # cliente async (redis.asyncio)
+langgraph-checkpoint-redis>=0.5    # AsyncRedisSaver: checkpoints de LangGraph en Redis
+httpx                              # scripts de prueba de carga y demo HITL
+
+# Observabilidad: Arize Phoenix vía OpenInference (OpenTelemetry)
+arize-phoenix-otel>=0.13
+openinference-instrumentation-langchain>=0.1.40
+
+# Tests (Redis falso con soporte de scripts Lua)
+pytest
+fakeredis[lua]>=2.26

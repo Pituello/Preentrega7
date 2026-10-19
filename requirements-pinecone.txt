@@ -1,0 +1,7 @@
+# OPCIONAL: solo para BUSQUEDA_BACKEND=pinecone (conectarse al índice de la Pre-Entrega 4).
+# Instalar primero PyTorch en versión CPU (mucho más liviana):
+#   python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+pinecone[asyncio]>=6,<8
+langchain-pinecone>=0.2.13
+langchain-huggingface
+sentence-transformers

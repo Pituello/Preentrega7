@@ -1,0 +1,52 @@
+# Infraestructura de la Pre-Entrega 7.
+#
+#   docker compose up -d                  -> Redis 8 + Phoenix (la API se corre en el venv: ver README)
+#   docker compose --profile api up -d    -> además, la API en un contenedor (opcional)
+#
+# Redis 8 incluye los módulos JSON y Search que necesita el checkpointer de LangGraph
+# (langgraph-checkpoint-redis). Un Redis 7 "pelado" no alcanza.
+services:
+  redis:
+    image: redis:8
+    container_name: vw-redis
+    command: ["redis-server", "--appendonly", "yes"]   # persiste en disco: los jobs y las pausas HITL sobreviven a un reinicio
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-datos:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  phoenix:
+    image: arizephoenix/phoenix:version-20.23.0   # versión con la que se probó la entrega
+    container_name: vw-phoenix
+    environment:
+      - PHOENIX_WORKING_DIR=/mnt/data
+    ports:
+      - "6006:6006"   # interfaz web + colector OTLP por HTTP (/v1/traces)
+      - "4317:4317"   # colector OTLP por gRPC
+    volumes:
+      - phoenix-datos:/mnt/data
+
+  api:
+    profiles: ["api"]
+    build: .
+    container_name: vw-api
+    env_file: .env
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - PHOENIX_COLLECTOR_ENDPOINT=http://phoenix:6006/v1/traces
+    ports:
+      - "8000:8000"
+    depends_on:
+      redis:
+        condition: service_healthy
+      phoenix:
+        condition: service_started
+
+volumes:
+  redis-datos:
+  phoenix-datos:
